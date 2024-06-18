@@ -1,9 +1,10 @@
 import cv2
 import os
-from PIL import Image
+
 
 # Verify dimensions for every image in the folders
 def check_image_dimensions(data_dir, splits, labels, corrupted_files):
+
     for split in splits:
         for label in labels:
             path = os.path.join(data_dir, split, label)
