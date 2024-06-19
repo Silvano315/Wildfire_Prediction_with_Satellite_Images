@@ -45,3 +45,11 @@ def plot_class_distribution(data_dir, splits, categories):
     sns.barplot(x='Split', y='Count', hue='Category', data=df, palette='pastel')
     plt.title('Class Distribution in Train, Test, and Validation Sets')
     plt.show()
+
+
+# Bar plot to see distribution for brightness and contrast
+def compute_brightness_contrast(image_path):
+    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    brightness = image.mean()
+    contrast = image.std()
+    return brightness, contrast
