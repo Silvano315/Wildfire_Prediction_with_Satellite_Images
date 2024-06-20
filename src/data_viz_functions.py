@@ -69,25 +69,6 @@ def compute_sharpness(image_path):
     return sharpness
 
 
-# Define the sharpen function
-def sharpen(image):
-
-    kernel = np.array([[0, -1, 0],
-                       [-1, 5,-1],
-                       [0, -1, 0]])
-    sharpened_image = cv2.filter2D(image, -1, kernel)
-
-    return sharpened_image
-
-
-# Define the noise reduction function
-def noise_reduction(image, kernel_size=(5, 5)):
-
-    blurred_image = cv2.GaussianBlur(image, kernel_size, 0)
-    
-    return blurred_image
-
-
 # Function to load a random image 
 def load_random_image(images_path):
 
