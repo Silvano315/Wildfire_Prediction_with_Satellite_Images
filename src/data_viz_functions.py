@@ -137,3 +137,29 @@ def compute_mean_color_histogram(images_path, split_name, category_name):
     mean_hist_r /= num_images
     
     return mean_hist_b, mean_hist_g, mean_hist_r
+
+# Plot random image with Canny's filter
+def plot_canny_edges(image):
+    # Convert image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    # Apply Gaussian blur to reduce noise
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    
+    # Detect edges using Canny
+    edges = cv2.Canny(blurred, threshold1=30, threshold2=100)
+    
+    # Plot the original image and edges
+    plt.figure(figsize=(12, 6))
+    plt.subplot(1, 2, 1)
+    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    plt.title('Original Image')
+    plt.axis('off')
+    
+    plt.subplot(1, 2, 2)
+    plt.imshow(edges, cmap='gray')
+    plt.title('Canny Edges')
+    plt.axis('off')
+    
+    plt.tight_layout()
+    plt.show()
