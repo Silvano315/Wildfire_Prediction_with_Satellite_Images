@@ -5,6 +5,7 @@ import cv2
 import os
 import pandas as pd
 import numpy as np
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
 # Plot randomized images for each folder and for each label
@@ -73,12 +74,12 @@ def compute_sharpness(image_path):
 def load_random_image(images_path):
 
     splits = ['train', 'test', 'valid']
-    categories = ['wildfire', 'nowildfire']
+    labels = ['wildfire', 'nowildfire']
 
     random_split = random.choice(splits)
-    random_category = random.choice(categories)
+    random_label = random.choice(labels)
 
-    image_dir = os.path.join(images_path, random_split, random_category)
+    image_dir = os.path.join(images_path, random_split, random_label)
     images = os.listdir(image_dir)
     random_image_name = random.choice(images)
     image_path = os.path.join(image_dir, random_image_name)
