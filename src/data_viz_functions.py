@@ -99,3 +99,41 @@ def display_images(original_image, enhanced_image, title):
     axs[1].axis('off')
     
     plt.show()
+
+def compute_mean_color_histogram(images_path, split_name, category_name):
+
+    dir_path = os.path.join(images_path, split_name, category_name)
+    
+    mean_hist_b = np.zeros((256,))
+    mean_hist_g = np.zeros((256,))
+    mean_hist_r = np.zeros((256,))
+    
+    num_images = 0
+    
+    image_files = os.listdir(dir_path)
+    for image_name in image_files:
+        image_path = os.path.join(dir_path, image_name)
+        image = cv2.imread(image_path)
+        
+        if image is None:
+            print(f"Warning: Could not read image '{image_path}'. Skipping...")
+            continue
+        
+        channels = cv2.split(image)
+        
+        # Compute histograms for each channel
+        hist_b = cv2.calcHist([channels[0]], [0], None, [256], [0, 256])
+        hist_g = cv2.calcHist([channels[1]], [0], None, [256], [0, 256])
+        hist_r = cv2.calcHist([channels[2]], [0], None, [256], [0, 256])
+        
+        mean_hist_b += hist_b.flatten()
+        mean_hist_g += hist_g.flatten()
+        mean_hist_r += hist_r.flatten()
+        
+        num_images += 1
+    
+    mean_hist_b /= num_images
+    mean_hist_g /= num_images
+    mean_hist_r /= num_images
+    
+    return mean_hist_b, mean_hist_g, mean_hist_r
