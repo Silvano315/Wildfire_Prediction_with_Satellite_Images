@@ -5,6 +5,8 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import random
 from matplotlib import pyplot as plt
 
+from src.constants import BATCH_SIZE, IMAGE_SIZE
+
 
 # Verify dimensions for every image in the folders
 def check_image_dimensions(data_dir, splits, labels, corrupted_files):
@@ -81,3 +83,35 @@ def load_and_plot_augmented_images(data_dir, datagen, num_augmented=5):
         if i > num_augmented:
             break
     plt.show()
+
+
+# Function to do image pre-processing: data augmentation and normalization
+def create_generator(images_path, dataset_type, target_size=(IMAGE_SIZE, IMAGE_SIZE), batch_size=BATCH_SIZE):
+
+    if dataset_type not in ['train', 'valid', 'test']:
+        raise ValueError("Check dataset name: dataset_type must be one of 'train', 'valid', or 'test'")
+
+    dataset_dir = os.path.join(images_path, dataset_type)
+    
+    if dataset_type == 'train':
+        datagen = ImageDataGenerator(
+            rescale=1./255,
+            rotation_range=20,
+            width_shift_range=0.1,
+            height_shift_range=0.1,
+            shear_range=0.2,
+            zoom_range=0.1,
+            horizontal_flip=True,
+            fill_mode='nearest'
+        )
+    else:
+        datagen = ImageDataGenerator(rescale=1./255)
+    
+    generator = datagen.flow_from_directory(
+        dataset_dir,
+        target_size=target_size,
+        batch_size=batch_size,
+        class_mode='binary'
+    )
+    
+    return generator
