@@ -24,3 +24,23 @@ def build_cnn_model(input_shape=(IMAGE_SIZE, IMAGE_SIZE, CHANNELS), num_output=1
                   metrics=['accuracy'])
     
     return model
+
+
+# Function to train a CNN model
+def train_cnn_model(model, train_generator, validation_generator, epochs=20, steps_per_epoch=None, validation_steps=None):
+
+    if steps_per_epoch is None:
+        steps_per_epoch = train_generator.samples // train_generator.batch_size
+    
+    if validation_steps is None:
+        validation_steps = validation_generator.samples // validation_generator.batch_size
+
+    history = model.fit(
+        train_generator,
+        steps_per_epoch=steps_per_epoch,
+        validation_data=validation_generator,
+        validation_steps=validation_steps,
+        epochs=epochs
+    )
+
+    return history
