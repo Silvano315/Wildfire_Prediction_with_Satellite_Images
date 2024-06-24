@@ -5,7 +5,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 import seaborn as sns
 import numpy as np
 
-from src.constants import IMAGE_SIZE, CHANNELS
+from src.constants import IMAGE_SIZE, CHANNELS, EPOCHS
 
 def build_cnn_model(input_shape=(IMAGE_SIZE, IMAGE_SIZE, CHANNELS), num_output=1, learning_rate=0.001, dropout_rate=0.5):
 
@@ -30,7 +30,7 @@ def build_cnn_model(input_shape=(IMAGE_SIZE, IMAGE_SIZE, CHANNELS), num_output=1
 
 
 # Function to train a CNN model
-def train_cnn_model(model, train_generator, validation_generator, epochs=20, steps_per_epoch=None, validation_steps=None):
+def train_cnn_model(model, train_generator, validation_generator, epochs=EPOCHS, steps_per_epoch=None, validation_steps=None):
 
     if steps_per_epoch is None:
         steps_per_epoch = train_generator.samples // train_generator.batch_size
