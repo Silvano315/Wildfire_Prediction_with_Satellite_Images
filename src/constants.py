@@ -2,7 +2,7 @@
 LABELS = 2
 
 # Batch size for train, valid and test sets
-BATCH_SIZE = 300
+BATCH_SIZE = 32
 
 # Number of epochs
 EPOCHS = 5
