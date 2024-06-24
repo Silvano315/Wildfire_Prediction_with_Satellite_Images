@@ -46,23 +46,26 @@ def check_gpu():
 
 
 # Function to train a CNN model
-def train_cnn_model(model, train_generator, validation_generator, epochs=EPOCHS, steps_per_epoch=None, validation_steps=None):
+def train_cnn_model(model, train_generator, validation_generator, epochs=EPOCHS, steps_per_epoch=None, validation_steps=None, batch_size=32, verbose=1):
 
     if steps_per_epoch is None:
-        steps_per_epoch = train_generator.samples // train_generator.batch_size
-    
+        steps_per_epoch = len(train_generator)
+
     if validation_steps is None:
-        validation_steps = validation_generator.samples // validation_generator.batch_size
+        validation_steps = len(validation_generator)
 
     history = model.fit(
         train_generator,
         steps_per_epoch=steps_per_epoch,
         validation_data=validation_generator,
         validation_steps=validation_steps,
-        epochs=epochs
+        epochs=epochs,
+        batch_size=batch_size,
+        verbose=verbose
     )
 
     return history
+
 
 
 # Models evaluation
