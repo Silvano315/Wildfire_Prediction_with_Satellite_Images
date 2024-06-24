@@ -2,6 +2,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
 from sklearn.metrics import classification_report, confusion_matrix
+import tensorflow as tf
 import seaborn as sns
 import numpy as np
 
@@ -27,6 +28,21 @@ def build_cnn_model(input_shape=(IMAGE_SIZE, IMAGE_SIZE, CHANNELS), num_output=1
                   metrics=['accuracy'])
     
     return model
+
+
+# Function to check if GPU is available
+def check_gpu():
+    devices = tf.config.list_physical_devices()
+    print("\nAll Physical Devices:", devices)
+
+    gpus = tf.config.list_physical_devices('GPU')
+    if gpus:
+        details = tf.config.experimental.get_device_details(gpus[0])
+        print("GPU details:", details)
+        return True
+    else:
+        print("No GPU found.")
+        return False
 
 
 # Function to train a CNN model
