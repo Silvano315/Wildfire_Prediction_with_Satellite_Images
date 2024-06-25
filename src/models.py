@@ -1,11 +1,13 @@
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, GlobalAveragePooling2D
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckPoint
+from tensorflow.keras.applications import InceptionV3
 from sklearn.metrics import classification_report, confusion_matrix
 import tensorflow as tf
 import seaborn as sns
 import numpy as np
+import os
 
 from src.constants import IMAGE_SIZE, CHANNELS, EPOCHS
 
@@ -47,13 +49,15 @@ def check_gpu():
 
 
 # Function to train a CNN model
-def train_cnn_model(model, train_generator, validation_generator, epochs=EPOCHS, steps_per_epoch=None, validation_steps=None, batch_size=32, verbose=1):
+def train_model(model, train_generator, validation_generator, epochs=EPOCHS, steps_per_epoch=None, validation_steps=None, batch_size=32, verbose=1):
 
     if steps_per_epoch is None:
         steps_per_epoch = len(train_generator)
 
     if validation_steps is None:
         validation_steps = len(validation_generator)
+
+    os.makedirs('Saved_Models', exist_ok=True)
 
     early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True, verbose=1)
 
@@ -132,3 +136,23 @@ def evaluate_train_test_performance(model, train_generator, test_generator):
     plt.ylabel('True')
     plt.title('Confusion Matrix for Test Set')
     plt.show()
+
+
+# Transfer Learning model
+def create_inceptionv3_model(input_shape=(IMAGE_SIZE, IMAGE_SIZE, CHANNELS), num_classes=1, learning_rate=0.001):
+
+    base_model = InceptionV3(weights='imagenet', include_top=False, input_shape=input_shape)
+    
+    x = base_model.output
+    x = GlobalAveragePooling2D()(x)
+    x = Dense(512, activation='relu')(x)
+    predictions = Dense(num_classes, activation='sigmoid')(x) if num_classes == 1 else Dense(num_classes, activation='softmax')(x)
+    
+    model = Model(inputs=base_model.input, outputs=predictions)
+    
+    for layer in base_model.layers:
+        layer.trainable = False
+    
+    model.compile(optimizer=Adam(learning_rate=learning_rate), loss='binary_crossentropy' if num_classes == 1 else 'categorical_crossentropy', metrics=['accuracy'])
+    
+    return model
