@@ -1,6 +1,7 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckPoint
 from sklearn.metrics import classification_report, confusion_matrix
 import tensorflow as tf
 import seaborn as sns
@@ -11,11 +12,11 @@ from src.constants import IMAGE_SIZE, CHANNELS, EPOCHS
 def build_cnn_model(input_shape=(IMAGE_SIZE, IMAGE_SIZE, CHANNELS), num_output=1, learning_rate=0.001, dropout_rate=0.5):
 
     model = Sequential([
-        Conv2D(32, (3, 3), activation='relu', input_shape=input_shape),
+        Conv2D(32, (3, 3), activation='relu', padding = 'same' ,input_shape=input_shape),
         MaxPooling2D((2, 2)),
-        Conv2D(64, (3, 3), activation='relu'),
+        Conv2D(64, (3, 3), padding = 'same', activation='relu'),
         MaxPooling2D((2, 2)),
-        Conv2D(128, (3, 3), activation='relu'),
+        Conv2D(128, (3, 3), padding = 'same', activation='relu'),
         MaxPooling2D((2, 2)),
         Flatten(),
         Dense(512, activation='relu'),
@@ -54,6 +55,10 @@ def train_cnn_model(model, train_generator, validation_generator, epochs=EPOCHS,
     if validation_steps is None:
         validation_steps = len(validation_generator)
 
+    early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True, verbose=1)
+
+    checkpoint = ModelCheckPoint('Saved_Models/best_model.h5', monitor='val_loss', save_best_only=True, mode='min', verbose=1)
+
     history = model.fit(
         train_generator,
         steps_per_epoch=steps_per_epoch,
@@ -61,7 +66,8 @@ def train_cnn_model(model, train_generator, validation_generator, epochs=EPOCHS,
         validation_steps=validation_steps,
         epochs=epochs,
         batch_size=batch_size,
-        verbose=verbose
+        verbose=verbose,
+        callbacks = [early_stopping, checkpoint]
     )
 
     return history

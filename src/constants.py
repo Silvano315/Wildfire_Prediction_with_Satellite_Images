@@ -5,7 +5,7 @@ LABELS = 2
 BATCH_SIZE = 32
 
 # Number of epochs
-EPOCHS = 5
+EPOCHS = 20
 
 # Image dimensions: 350x350
 IMAGE_SIZE = 350
