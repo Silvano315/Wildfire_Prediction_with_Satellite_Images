@@ -6,6 +6,7 @@ from tensorflow.keras.applications import InceptionV3
 from sklearn.metrics import classification_report, confusion_matrix
 import tensorflow as tf
 import seaborn as sns
+import matplotlib.pyplot as plt
 import numpy as np
 import os
 
@@ -79,8 +80,6 @@ def train_model(model, train_generator, validation_generator, epochs=EPOCHS, ste
 
 
 # Models evaluation
-import matplotlib.pyplot as plt
-
 def plot_training_validation_history(history):
 
     acc = history.history['accuracy']
