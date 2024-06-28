@@ -54,12 +54,14 @@ def check_gpu():
 
 def train_model(model, train_generator, validation_generator, epochs=EPOCHS, steps_per_epoch=None, validation_steps=None, batch_size=BATCH_SIZE, verbose=1):
 
+    """
     if steps_per_epoch is None:
         steps_per_epoch = train_generator.samples // train_generator.batch_size
 
     if validation_steps is None:
         validation_steps = validation_generator.samples // validation_generator.batch_size
-
+    """
+    
     os.makedirs('Saved_Models', exist_ok=True)
 
     early_stopping = EarlyStopping(monitor='val_accuracy', patience=5, restore_best_weights=True, verbose=1)
