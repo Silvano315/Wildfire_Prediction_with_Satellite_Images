@@ -100,6 +100,13 @@ def display_images(original_image, enhanced_image, title):
     
     plt.show()
 
+# Function to extract coordinates from filename
+def extract_coordinates(filename):
+    base_name = os.path.splitext(os.path.basename(filename))[0]
+    lon, lat = map(float, base_name.split(','))
+    return lat, lon
+
+
 def compute_mean_color_histogram(images_path, split_name, category_name):
 
     dir_path = os.path.join(images_path, split_name, category_name)
