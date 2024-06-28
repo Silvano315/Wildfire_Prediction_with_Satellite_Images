@@ -1,7 +1,8 @@
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, GlobalAveragePooling2D
+from tensorflow.keras.regularizers import l1, l2
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckPoint
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.keras.applications import InceptionV3
 from sklearn.metrics import classification_report, confusion_matrix
 import tensorflow as tf
@@ -10,19 +11,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-from src.constants import IMAGE_SIZE, CHANNELS, EPOCHS
+from src.constants import IMAGE_SIZE, CHANNELS, EPOCHS, BATCH_SIZE
 
-def build_cnn_model(input_shape=(IMAGE_SIZE, IMAGE_SIZE, CHANNELS), num_output=1, learning_rate=0.001, dropout_rate=0.5):
+def build_cnn_model(input_shape=(IMAGE_SIZE, IMAGE_SIZE, CHANNELS), num_output=1, learning_rate=0.001, dropout_rate=0.3, l1_penalty=0.001):
 
     model = Sequential([
-        Conv2D(32, (3, 3), activation='relu', padding = 'same' ,input_shape=input_shape),
+        Conv2D(8, (3, 3), activation='relu', padding = 'same' ,input_shape=input_shape),
         MaxPooling2D((2, 2)),
-        Conv2D(64, (3, 3), padding = 'same', activation='relu'),
+        Conv2D(16, (3, 3), padding = 'same', activation='relu'),
         MaxPooling2D((2, 2)),
-        Conv2D(128, (3, 3), padding = 'same', activation='relu'),
+        Conv2D(32, (3, 3), padding = 'same', activation='relu', kernel_regularizer=l1(l1_penalty)),
         MaxPooling2D((2, 2)),
         Flatten(),
-        Dense(512, activation='relu'),
+        Dense(256, activation='relu', kernel_regularizer=l1(l1_penalty)),
         Dropout(dropout_rate),
         Dense(num_output, activation='sigmoid' if num_output == 1 else 'softmax')
     ])
@@ -50,7 +51,8 @@ def check_gpu():
 
 
 # Function to train a CNN model
-def train_model(model, train_generator, validation_generator, epochs=EPOCHS, steps_per_epoch=None, validation_steps=None, batch_size=32, verbose=1):
+
+def train_model(model, train_generator, validation_generator, epochs=EPOCHS, steps_per_epoch=None, validation_steps=None, batch_size=BATCH_SIZE, verbose=1):
 
     if steps_per_epoch is None:
         steps_per_epoch = train_generator.samples // train_generator.batch_size
@@ -60,10 +62,11 @@ def train_model(model, train_generator, validation_generator, epochs=EPOCHS, ste
 
     os.makedirs('Saved_Models', exist_ok=True)
 
-    early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True, verbose=1)
+    early_stopping = EarlyStopping(monitor='val_accuracy', patience=5, restore_best_weights=True, verbose=1)
 
-    checkpoint = ModelCheckPoint('Saved_Models/best_model.h5', monitor='val_loss', save_best_only=True, mode='min', verbose=1)
-
+    #checkpoint = ModelCheckpoint('/kaggle/working/best_model.h5', monitor='val_loss', save_best_only=True, mode='min', verbose=1)
+    checkpoint = ModelCheckpoint('/kaggle/working/best_model.keras', monitor='val_accuracy', save_best_only=True, mode='max', verbose=1)
+    
     history = model.fit(
         train_generator,
         steps_per_epoch=steps_per_epoch,
@@ -72,11 +75,11 @@ def train_model(model, train_generator, validation_generator, epochs=EPOCHS, ste
         epochs=epochs,
         batch_size=batch_size,
         verbose=verbose,
-        callbacks = [early_stopping, checkpoint]
+        callbacks = [early_stopping, 
+                     checkpoint]
     )
 
     return history
-
 
 
 # Models evaluation
