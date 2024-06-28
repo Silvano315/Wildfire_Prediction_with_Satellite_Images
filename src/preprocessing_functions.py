@@ -86,7 +86,7 @@ def load_and_plot_augmented_images(data_dir, datagen, num_augmented=5):
 
 
 # Function to do image pre-processing: data augmentation and normalization
-def create_generator(images_path, dataset_type, target_size=(IMAGE_SIZE, IMAGE_SIZE), batch_size=BATCH_SIZE):
+def create_generator(images_path, dataset_type, target_size=(IMAGE_SIZE, IMAGE_SIZE), batch_size=BATCH_SIZE, num_output=1):
 
     if dataset_type not in ['train', 'valid', 'test']:
         raise ValueError("Check dataset name: dataset_type must be one of 'train', 'valid', or 'test'")
@@ -104,6 +104,7 @@ def create_generator(images_path, dataset_type, target_size=(IMAGE_SIZE, IMAGE_S
             horizontal_flip=True,
             fill_mode='nearest'
         )
+        
     else:
         datagen = ImageDataGenerator(rescale=1./255)
     
@@ -111,7 +112,7 @@ def create_generator(images_path, dataset_type, target_size=(IMAGE_SIZE, IMAGE_S
         dataset_dir,
         target_size=target_size,
         batch_size=batch_size,
-        class_mode='binary'
+        class_mode='binary' if num_output == 1 else 'categorical'
     )
     
     return generator
