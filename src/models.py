@@ -52,7 +52,7 @@ def check_gpu():
 
 # Function to train a CNN model
 
-def train_model(model, train_generator, validation_generator, epochs=EPOCHS, steps_per_epoch=None, validation_steps=None, batch_size=BATCH_SIZE, verbose=1):
+def train_model(model, train_generator, validation_generator, epochs=EPOCHS, steps_per_epoch=None, validation_steps=None, batch_size=BATCH_SIZE, verbose=1, model_type = 'scratch'):
 
     """
     if steps_per_epoch is None:
@@ -63,11 +63,14 @@ def train_model(model, train_generator, validation_generator, epochs=EPOCHS, ste
     """
     
     os.makedirs('Saved_Models', exist_ok=True)
-
     early_stopping = EarlyStopping(monitor='val_accuracy', patience=5, restore_best_weights=True, verbose=1)
 
-    #checkpoint = ModelCheckpoint('/kaggle/working/best_model.h5', monitor='val_loss', save_best_only=True, mode='min', verbose=1)
-    checkpoint = ModelCheckpoint('/kaggle/working/best_model.keras', monitor='val_accuracy', save_best_only=True, mode='max', verbose=1)
+    if model_type == 'scratch':
+        #checkpoint = ModelCheckpoint('/kaggle/working/best_model.h5', monitor='val_loss', save_best_only=True, mode='min', verbose=1)
+        checkpoint = ModelCheckpoint('/kaggle/working/Saved_Models/best_model.keras', monitor='val_accuracy', save_best_only=True, mode='max', verbose=1)
+    else:
+        #checkpoint = ModelCheckpoint('/kaggle/working/best_model.h5', monitor='val_loss', save_best_only=True, mode='min', verbose=1)
+        checkpoint = ModelCheckpoint('/kaggle/working/Saved_Models/best_model_TF.keras', monitor='val_accuracy', save_best_only=True, mode='max', verbose=1)        
     
     history = model.fit(
         train_generator,
@@ -94,17 +97,18 @@ def plot_training_validation_history(history):
     epochs = range(1, len(acc) + 1)
     
     plt.figure(figsize=(14, 5))
+    
     plt.subplot(1, 2, 1)
-    plt.plot(epochs, acc, 'bo', label='Training Accuracy')
-    plt.plot(epochs, val_acc, 'b', label='Validation Accuracy')
+    plt.plot(epochs, acc, 'blue', label='Training Accuracy')  
+    plt.plot(epochs, val_acc, 'orange', label='Validation Accuracy') 
     plt.title('Training and Validation Accuracy')
     plt.xlabel('Epochs')
     plt.ylabel('Accuracy')
     plt.legend()
     
     plt.subplot(1, 2, 2)
-    plt.plot(epochs, loss, 'ro', label='Training Loss')
-    plt.plot(epochs, val_loss, 'r', label='Validation Loss')
+    plt.plot(epochs, loss, 'blue', label='Training Loss')  
+    plt.plot(epochs, val_loss, 'orange', label='Validation Loss')  
     plt.title('Training and Validation Loss')
     plt.xlabel('Epochs')
     plt.ylabel('Loss')
@@ -115,20 +119,19 @@ def plot_training_validation_history(history):
 
 
 # Function to compare training and test evaluation metrics
-def evaluate_train_test_performance(model, train_generator, test_generator):
+def evaluate_train_test_performance(model, train_generator, test_generator, history):
 
-    train_loss, train_accuracy = model.evaluate(train_generator, steps=train_generator.samples // train_generator.batch_size)
+    train_accuracy = np.mean(tl_history.history['accuracy'])
     print(f'Train Accuracy: {train_accuracy * 100:.2f}%')
-    print(f'Train Loss: {train_loss:.4f}')
-
-    test_loss, test_accuracy = model.evaluate(test_generator, steps=test_generator.samples // test_generator.batch_size)
-    print(f'Test Accuracy: {test_accuracy * 100:.2f}%')
-    print(f'Test Loss: {test_loss:.4f}')
 
     test_generator.reset()
     y_true = test_generator.classes
-    y_pred = model.predict(test_generator, steps=test_generator.samples // test_generator.batch_size)
-    y_pred = np.rint(y_pred).astype(int).flatten()
+    y_pred_prob = tl_model.predict(test_generator)
+    y_pred_prob = y_pred_prob[:len(y_true)]
+    y_pred = np.argmax(y_pred_prob, axis=1)
+
+    test_accuracy = np.mean(y_true == y_pred)
+    print(f'Test Accuracy: {test_accuracy * 100:.2f}%')
 
     print("\nClassification Report for Test Set:")
     print(classification_report(y_true, y_pred, target_names=test_generator.class_indices.keys()))
