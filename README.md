@@ -4,6 +4,9 @@
 1. [Introduction](#introduction)
 2. [Dataset](#dataset)
 3. [Methods](#methods)
+    * [Exploratory Data Analysis (EDA)](#exploratory-data-analysis-eda)
+    * [Deep Learning Models](#deep-learning-models)
+    * [Explainability with ELI5](#explainability-with-eli5)
 4. [Results](#results)
 5. [References](#references)
 
