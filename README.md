@@ -45,6 +45,6 @@ The data was divided into train, test and validation with these percentages :
 
 ## References
 
-1. <a name="ref1"></a> https://www.kaggle.com/datasets/abdelghaniaaba/wildfire-prediction-dataset
-2. <a name="ref2"></a> https://github.com/TeamHG-Memex/eli5
+1. <a name="ref1"></a> https://github.com/TeamHG-Memex/eli5 
+2. <a name="ref2"></a> https://www.kaggle.com/datasets/abdelghaniaaba/wildfire-prediction-dataset
 
