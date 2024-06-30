@@ -36,6 +36,16 @@ The data was divided into train, test and validation with these percentages :
 
 ### Exploratory Data Analysis (EDA)
 
+In the exploratory data analysis (EDA) phase of this project, I began by verifying the dataset split percentages and distribution to ensure everything was consistent with the details provided by the Kaggle dataset owner. Our checks confirmed that the dataset splits were accurate and properly distributed.
+
+Next, I checked for corrupted files and inconsistent image dimensions. This step was crucial to maintain data integrity and quality, and I identified and removed two corrupted images from the dataset.
+
+Given that the image filenames were composed of longitude and latitude coordinates, I leveraged this information for a comprehensive geographical analysis. I extracted these coordinates and visualized them on a map, which I saved as an HTML file using the **Folium** package. You can view this interactive map [here](Saved_Images/earth_heatmap.html). Additionally, I used the **Geopandas** package to create a heatmap, illustrating the geographical distribution of the images on an Earth base map. This heatmap can be viewed [here](Saved_Images/earth_heatmap.html).
+
+To assess the quality of the images, I conducted an in-depth analysis focusing on various aspects. For brightness and contrast, I used boxplots to analyze the data for each class and split, providing insights into the overall image quality and consistency across different classes. I measured edge density using Canny's filter, chosen for its effectiveness in detecting a wide range of edges in images. For sharpness, I employed the Laplacian operator, which is ideal due to its sensitivity to regions of rapid intensity change.
+
+Furthermore, I explored data enhancement techniques, including sharpening and noise reduction, to improve image quality. I also performed data augmentation with various transformations, such as rotation, width and height shifts, zoom, and flips, to increase the diversity of the training dataset. To ensure these augmentations retained key features while introducing necessary variability, I visualized the augmented images. An example of an augmented image can be seen [here](Saved_Images/Augmented_Images.png).
+
 ### Deep Learning Models
 
 ### Explainability with ELI5
