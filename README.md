@@ -15,13 +15,13 @@
 
 Wildfires are a significant environmental hazard, causing extensive damage to ecosystems, property, and human life. The ability to predict and detect wildfires early is crucial for mitigating their impact. This project aims to harness the power of satellite imagery and deep learning techniques to develop a Convolutional Neural Network (CNN) model and Transfer Learning solution for wildfire detection and prediction.
 
-The primary objective is to explore a satellite image dataset to build a robust Deep Learning model capable of accurately identifying wildfire occurrences. The project also considers the integration of an interpretability module with Explain like I'm 5 (ELI5), which has integrated Keras - explain predictions of image classifiers via Grad-CAM visualizations [[2](#ref2)].
+The primary objective is to explore a satellite image dataset to build a robust Deep Learning model capable of accurately identifying wildfire occurrences. The project also considers the integration of an interpretability module with Explain like I'm 5 (ELI5), which has integrated Keras - explain predictions of image classifiers via Grad-CAM visualizations [[1](#ref1)].
 
 This is a kind of Remote Sensing project, which conists on the acquisition of information about an object or phenomenon without making physical contact with the object. Satellite data provides valuable information for a wide range of applications including environmental monitoring, agriculture, and disaster management.
 
 ## Dataset
 
-The dataset was taken from a Kaggle repository [[1](#ref1)]. Satellite images of areas that previously experienced wildfires in Canada.
+The dataset was taken from a Kaggle repository [[2](#ref2)]. Satellite images of areas that previously experienced wildfires in Canada.
 
 This dataset contains satellite images (350x350px) in 2 classes :
 * Wildfire : 22710 images
