@@ -48,6 +48,15 @@ Furthermore, I explored data enhancement techniques, including sharpening and no
 
 ### Deep Learning Models
 
+In the deep learning models phase of this project, I applied data augmentation techniques to enhance the training set. I utilized various augmentation strategies, including rotation, width and height shifts, shear transformations, zoom, and horizontal flips, ensuring that the augmented data closely resembled real-world variations while maintaining the essential features of the original images.
+
+For model building, I explored two distinct approaches. The first approach involved constructing a **Convolutional Neural Network (CNN)** from scratch. This model was designed with multiple convolutional and pooling layers, followed by dense layers with dropout and L1 penalty for regularization.
+
+In addition to the CNN model, I implemented a transfer learning approach using the **InceptionV3 model** [[3](#ref3)], pre-trained on the ImageNet dataset. This method leveraged the powerful feature extraction capabilities of InceptionV3, enabling the model to learn from the pre-existing knowledge while adapting to the specific task of wildfire detection. I added custom layers on top of the InceptionV3 base to fine-tune the model for this binary classification task.
+
+Training the models involved using a combination of early stopping and model checkpointing on validation accuracy to prevent overfitting and ensure that the best-performing model was saved. 
+
+
 ### Explainability with ELI5
 
 ## Results
@@ -57,4 +66,4 @@ Furthermore, I explored data enhancement techniques, including sharpening and no
 
 1. <a name="ref1"></a> https://github.com/TeamHG-Memex/eli5 
 2. <a name="ref2"></a> https://www.kaggle.com/datasets/abdelghaniaaba/wildfire-prediction-dataset
-
+3. <a name="ref3"></a> https://arxiv.org/abs/1512.00567
