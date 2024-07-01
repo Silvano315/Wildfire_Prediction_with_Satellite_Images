@@ -59,6 +59,10 @@ Training the models involved using a combination of early stopping and model che
 
 ### Explainability with ELI5
 
+**[TO BE EVALUATE]**
+This section has to be concluded because ELI5 for Keras requires old package versions [[3](#ref4)] ("Note: only TensorFlow 1.x is supported, recommended Keras version is 2.3.1 or earlier.").
+The idea is to wait for an upgrade. I could use Tensorflow for the GradCam integration, but I've already used in another project and I wanted to test this function with ELI5.
+
 ## Results
 
 
@@ -67,3 +71,4 @@ Training the models involved using a combination of early stopping and model che
 1. <a name="ref1"></a> https://github.com/TeamHG-Memex/eli5 
 2. <a name="ref2"></a> https://www.kaggle.com/datasets/abdelghaniaaba/wildfire-prediction-dataset
 3. <a name="ref3"></a> https://arxiv.org/abs/1512.00567
+4. <a name="ref4"></a> https://eli5.readthedocs.io/en/latest/libraries/keras.html
