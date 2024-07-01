@@ -121,12 +121,12 @@ def plot_training_validation_history(history):
 # Function to compare training and test evaluation metrics
 def evaluate_train_test_performance(model, train_generator, test_generator, history):
 
-    train_accuracy = np.mean(tl_history.history['accuracy'])
+    train_accuracy = np.mean(history.history['accuracy'])
     print(f'Train Accuracy: {train_accuracy * 100:.2f}%')
 
     test_generator.reset()
     y_true = test_generator.classes
-    y_pred_prob = tl_model.predict(test_generator)
+    y_pred_prob = model.predict(test_generator)
     y_pred_prob = y_pred_prob[:len(y_true)]
     y_pred = np.argmax(y_pred_prob, axis=1)
 
