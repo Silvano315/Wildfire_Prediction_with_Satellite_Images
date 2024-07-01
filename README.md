@@ -63,8 +63,24 @@ Training the models involved using a combination of early stopping and model che
 This section has to be concluded because ELI5 for Keras requires old package versions [[3](#ref4)] ("Note: only TensorFlow 1.x is supported, recommended Keras version is 2.3.1 or earlier.").
 The idea is to wait for an upgrade. I could use Tensorflow for the GradCam integration, but I've already used in another project and I wanted to test this function with ELI5.
 
+This could be the main idea:
+To gain insights into how the trained model makes predictions, I would have employed Gradient-weighted Class Activation Mapping (Grad-CAM) using the ELI5 library. Grad-CAM provides a visual explanation of the regions in the image that are most relevant to the model's prediction. I'd have loaded the best-performing model from the saved file and selected a sample image from the test dataset. Using ELI5, you have the possibility to directly use the Grad-CAM to visualize the activation heatmap based on the model's predictions. 
+
+
 ## Results
 
+I run this project on Kaggle, so you can find there results about deep learning step, [click here](https://www.kaggle.com/code/silvanoquarto31/cnn-transfer-learning/notebook).
+
+Both deep learning models, developed from scratch and using transfer learning, demonstrated robust performance on the wildfire detection task. Each model achieved high accuracies, exceeding 95% on both training and validation datasets.
+
+- **CNN from Scratch:**
+  - Achieved a training accuracy of over 95% and validation accuracy consistent with the training trends.
+  - The loss function decreased steadily throughout training, demonstrating effective learning.
+
+- **Transfer Learning (InceptionV3):**
+  - Outperformed the CNN from scratch with enhanced stability in training accuracy over epochs.
+  - Demonstrated superior performance with a more pronounced reduction in the loss function, nearly halving the loss compared to the scratch solution.
+  - Leveraged pre-trained weights from the InceptionV3 model on ImageNet, enabling effective feature extraction and learning transfer.
 
 ## References
 
